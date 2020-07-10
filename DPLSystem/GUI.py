@@ -1,14 +1,29 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from PyQt5.QtWidgets import QMessageBox
+from .UIFunctions import UIHandler
 
 class Ui_Dialog(object):
     def __init__(self):
+        self.handler = UIHandler()
         self.EnteredPasscode = []
-    def changeCnt(cnt):
-        EnteredPasscode.append(x);
-        print(EnteredPasscode)
+        self.msg = QMessageBox()
+
+    def verifyPasscode(self):
+        if self.handler.verifyPasscode(self.EnteredPasscode) == True:
+            self.msg.setWindowTitle("Verified")
+            self.msg.setText("Verified!")
+            self.msg.exec_()
+        else:
+            self.msg.setWindowTitle("Passcode Cannot be verified")
+            self.msg.setText("Passcode Cannot be verified. Plase Double check it")
+            self.msg.exec_()
+        self.EnteredPasscode.clear()
+
+    def verifyCameraRecordings(self):
+        pass
 
     def setupUi(self, Dialog):
+
         Dialog.setObjectName("Dialog")
         Dialog.resize(663, 451)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
@@ -92,44 +107,45 @@ class Ui_Dialog(object):
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
 
         self.pushButton_0.setText(_translate("Dialog", "0"))
-        self.pushButton_0.clicked.connect(lambda: self.EnteredPasscode.append(0))
+        # self.pushButton_0.clicked.connect(lambda: self.EnteredPasscode.append('0'))
+        self.pushButton_0.clicked.connect(self.verifyPasscode)
 
         self.pushButton_1.setText(_translate("Dialog", "1"))
-        self.pushButton_1.clicked.connect(lambda: self.EnteredPasscode.append(1))
+        self.pushButton_1.clicked.connect(lambda: self.EnteredPasscode.append('1'))
 
         self.pushButton_2.setText(_translate("Dialog", "2"))
-        self.pushButton_2.clicked.connect(lambda: self.EnteredPasscode.append(2))
+        self.pushButton_2.clicked.connect(lambda: self.EnteredPasscode.append('2'))
 
         self.pushButton_3.setText(_translate("Dialog", "3"))
-        self.pushButton_3.clicked.connect(lambda: self.EnteredPasscode.append(3))
+        self.pushButton_3.clicked.connect(lambda: self.EnteredPasscode.append('3'))
 
         self.pushButton_4.setText(_translate("Dialog", "4"))
-        self.pushButton_4.clicked.connect(lambda: self.EnteredPasscode.append(4))
+        self.pushButton_4.clicked.connect(lambda: self.EnteredPasscode.append('4'))
 
         self.pushButton_5.setText(_translate("Dialog", "5"))
-        self.pushButton_5.clicked.connect(lambda: self.EnteredPasscode.append(5))
+        self.pushButton_5.clicked.connect(lambda: self.EnteredPasscode.append('5'))
 
         self.pushButton_6.setText(_translate("Dialog", "6"))
-        self.pushButton_6.clicked.connect(lambda: self.EnteredPasscode.append(6))
+        self.pushButton_6.clicked.connect(lambda: self.EnteredPasscode.append('6'))
 
         self.pushButton_7.setText(_translate("Dialog", "7"))
-        self.pushButton_7.clicked.connect(lambda: self.EnteredPasscode.append(7))
+        self.pushButton_7.clicked.connect(lambda: self.EnteredPasscode.append('7'))
 
         self.pushButton_8.setText(_translate("Dialog", "8"))
-        self.pushButton_8.clicked.connect(lambda: self.EnteredPasscode.append(8))
+        self.pushButton_8.clicked.connect(lambda: self.EnteredPasscode.append('8'))
 
         self.pushButton_9.setText(_translate("Dialog", "9"))
-        self.pushButton_9.clicked.connect(lambda: self.EnteredPasscode.append(9))
-
+        self.pushButton_9.clicked.connect(lambda: self.EnteredPasscode.append('9'))
 
         self.pushButton_BackSpace.setText(_translate("Dialog", "Backspace"))
-        self.pushButton_BackSpace.clicked.connect(lambda: print(self.EnteredPasscode))
+        self.pushButton_BackSpace.clicked.connect(lambda: self.EnteredPasscode.pop() if len(self.EnteredPasscode)>0 else None)
 
         self.pushButton_Cancel.setText(_translate("Dialog", "Cancel"))
-        self.pushButton_Cancel.clicked.connect(lambda: self.EnteredPasscode.clear() )
+        # self.pushButton_Cancel.clicked.connect(lambda: self.EnteredPasscode.clear() )
+        self.pushButton_Cancel.clicked.connect(lambda: print(self.EnteredPasscode) )
 
         self.push_Enter.setText(_translate("Dialog", "Enter"))
-        self.push_Enter.clicked.connect(lambda: print(self.EnteredPasscode))
+        self.push_Enter.clicked.connect(self.verifyPasscode)
 
 
         self.WelcomeLabel.setText(_translate("Dialog", "Please Enter your Passcode Or Scan your Package/QrCode"))
