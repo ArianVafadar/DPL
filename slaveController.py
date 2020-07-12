@@ -31,28 +31,16 @@ def send_to_port():
         else:
             print("Unlocking lock ", lockNum)
             ser.write(bytes.fromhex(toUnlockHex[lockNum-1]))
-#             time.sleep(0.5)
 
-        #             elif unlockSucceedHex[i] not in b.hex() and unlockFailedHex[i] not in b.hex() and toUnlockHex[i] not in b.hex():
-        #                 print("error happened", b.hex())
-        #                 break
-
-# def sendMsg():
-#     while ser.inWaiting()>0:
-#     b = ser.read(ser.inWaiting())
-# #         s += b
-#     print("auto detected:", b.hex())
-# #print(ser.inWaiting())
 def read_from_port(ser):
     while True:
-#         print("............................")
         time.sleep(0.3)
         b = ser.read(ser.inWaiting())
-#         print(b)
+
         for i in range(nLock):
-#             print("...for loop...")
+
             if lockSucceedHex[i] in b.hex():
-#                 print("...if case...")
+
                 print("Lock ", i+1, " locked successfully")
                 
             if unlockSucceedHex[i] in b.hex():
@@ -64,14 +52,10 @@ def read_from_port(ser):
             if toUnlockHex[i] in b.hex():
                 print("Lock ", i+1, "is unlocked already")
                 
-# 
-# while True:
 try:
     thread = threading.Thread(target=read_from_port, args=(ser,))
     thread.start()
     send_to_port()
 except KeyboardInterrupt:
-    print("keyboard interrrupts")
-finally:
     thread.join()
     ser.close()
