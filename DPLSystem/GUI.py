@@ -1,6 +1,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
 from .UIFunctions import UIHandler
+# import threading
+# import concurrent.futures
 
 class Ui_Dialog(object):
     def __init__(self):
@@ -9,14 +11,18 @@ class Ui_Dialog(object):
         self.msg = QMessageBox()
 
     def verifyPasscode(self):
-        if self.handler.verifyPasscode(self.EnteredPasscode) == True:
-            self.msg.setWindowTitle("Verified")
-            self.msg.setText("Verified!")
-            self.msg.exec_()
-        else:
+        if self.handler.verifyPasscode(self.EnteredPasscode) == False:
             self.msg.setWindowTitle("Passcode Cannot be verified")
             self.msg.setText("Passcode Cannot be verified. Plase Double check it")
             self.msg.exec_()
+            self.EnteredPasscode.clear()
+            return
+
+        self.msg.setWindowTitle("Passcode Verified")
+        self.msg.setText("Please grab your package and close the locker")
+        self.msg.exec_()
+
+        self.handler.wait_till_locker_closes(self.EnteredPasscode)
         self.EnteredPasscode.clear()
 
     def verifyCameraRecordings(self):
