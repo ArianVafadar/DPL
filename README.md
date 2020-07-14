@@ -19,4 +19,3 @@ To run the package you should:
 
   3. To run the file run the following command:
     - python3 main.py
-    PyQt5-sip==12.8.0

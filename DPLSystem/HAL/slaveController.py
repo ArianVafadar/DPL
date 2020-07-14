@@ -1,6 +1,5 @@
 from serial import Serial
-import time
-import threading
+from time import sleep
 
 
 class slaveController():
@@ -20,84 +19,51 @@ class slaveController():
             self.port = Serial("/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0", 9600)
         except:
             print ("Cannot establish Serial connection to specified port")
+            exit()
+
 
     def __del__(self):
-        # if self.port.is_open():
-        #     self.port.close()
-        pass
-    def send_to_port(self, lockNum):
+        try:
+            if self.port.isOpen():
+                self.port.close()
+        except:
+            print("port is not configured correctly")
+
+    def unlock_lock(self, lockNum):
         '''
             it will take a lockNum and unlock the corresponding locker to that
             lock number in success it will return True else its a False
         '''
         try:
-            self.port.open()
+            if not self.port.isOpen():
+                self.port.open()
         except:
-            print ("Cannot open serial port")
+            print("port is disabled")
             return False
 
-        if lockNum<0 or lockNum > 4:
+        if lockNum<0 or lockNum > self.nLock:
             print("Invalid input, please try again.")
             self.port.close()
             return False
         else:
             self.port.flushOutput()
-            self.port.write(bytes.fromhex(toUnlockHex[lockNum-1]))
+            self.port.write(bytes.fromhex(self.toUnlockHex[lockNum-1]))
         self.port.close()
         return True
-        # while True:
-        #     time.sleep(1)
-        #     # lockNum = int(input("to lock #: "))
-        #     #print(lockNum, type(lockNum))
-        #     if lockNum<0 or lockNum > 4:
-        #         print("Invalid input, please try again.")
-        #         break
-        #     else:
-        #         print("Unlocking lock ", lockNum)
-        #         port.write(bytes.fromhex(toUnlockHex[lockNum-1]))
 
-    def read_from_port(self):
+    def wait_till_locker_closes(self, lock_num):
         try:
-            self.port.open()
+            if not self.port.isOpen():
+                self.port.open()
         except:
-            print ("Cannot open serial port")
-            return
+            print("port is disabled")
+            return False
 
-        port.flushInput()
-        reading = read(port.inWaiting())
-        #
-        # Some logic code based on readings to determine the state of the lock
-        #
-        self.port.close()
-        return lock or unlocked
-        # while True:
-        #     time.sleep(0.3)
-        #     b = port.read(port.inWaiting())
-        #     for i in range(nLock):
-        #         if self.lockSucceedHex[i] in b.hex():
-        #             print("Lock ", i+1, " locked successfully")
-        #         if self.unlockSucceedHex[i] in b.hex():
-        #             print("Lock ", i+1, " unlocked successfully")
-        #         if self.unlockFailedHex[i] in b.hex():
-        #             print("Lock ", i+1, " unlocked failed")
-        #         if self.toUnlockHex[i] in b.hex():
-        #             print("Lock ", i+1, "is unlocked already")
-    def wait_till_locker_closes(self, locker_num):
-        '''
-            this function will run in an infinite loop until the locker_num is closed
-        '''
-        pass
-
-
-# try:
-#     port =slaveController()
-#     thread = threading.Thread(target= port.read_from_port))
-#     thread.start()
-#     send_to_port()
-# except KeyboardInterrupt:
-#     thread.join()
-
-
-#at this point the door must be open.
-# executor = concurrent.futures.ThreadPoolExecutor(max_workers=3)
-# check_res = executor.submit(self.check_pass, passcode)
+        self.port.flushInput()
+        is_unlocked = True
+        while is_unlocked:
+            status = self.port.read(self.port.inWaiting()).hex()
+            if self.lockSucceedHex[lock_num-1] in status:
+                is_unlocked = False
+            sleep(2)
+        return True

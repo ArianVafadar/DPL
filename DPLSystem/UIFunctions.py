@@ -19,7 +19,7 @@ class UIHandler():
         if not self.db.get_delivery_by_passcode(passcode):
             return False
         locker_num = int(passcode[2:4])
-        if not self.slaveCntr.send_to_port(locker_num): #unlock the locker
+        if not self.slaveCntr.unlock_lock(locker_num):
             print("something went wrong with the slave controller")
             return False
         return True
@@ -31,12 +31,8 @@ class UIHandler():
         '''
         locker_num = int(passcode[2:4])
         self.slaveCntr.wait_till_locker_closes(locker_num)
-        #@todo: once wait_till_locker_closes is finished
-        #the strucutre should be like this: while(unlocked): sleep(1); keep checking;
-
         delivery=self.db.get_delivery_by_passcode(passcode)
         self.db.update_delivery_status(delivery.delivery_id, "picked-up")
-
         self.db.update_locker_state(locker_num,"available")
         #push to servers?
 

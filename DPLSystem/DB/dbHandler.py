@@ -13,7 +13,7 @@ class dbHandler():
         delivery = Sesssion.query(delivery).filter_by(delivery_id=delivery_id).first()
         # delivery.status = status
         Session.commit()
-    def update_locker_state(self, locker_num, state)f:
+    def update_locker_state(self, locker_num, state):
         '''
             takes in locker_num and state and changes the bit value in the
             station.lockers_available.
