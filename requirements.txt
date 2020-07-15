@@ -6,3 +6,13 @@ pyzbar==0.1.8
 
 #serial==0.0.97
 pyserial==3.4
+
+#Libraries needed: 
+python-serial
+wiringpi
+python-pip
+python3-pip
+RPi.GPIO
+opencv
+libzbar0
+pyzbar
