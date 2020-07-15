@@ -13,7 +13,6 @@ Modify files on raspberry pi:
     delete: console = serial1, 115200 and kgdboc = serial1, 115200
     After modification: 
     dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2  rootfstype=ext4 elevator=deadline fsck.repair=yes  rootwait
-    
     $ sudo nano /boot/config.txt
     add: dtoverlay=sc16is752-spil, int_pin=24
     $ sudo reboot
