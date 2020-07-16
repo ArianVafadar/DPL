@@ -96,7 +96,7 @@ class Scanner():
        
 
 # uncomment codes below to test this file
-scan = Scanner()
-scan.startPoint()
+# scan = Scanner()
+# scan.startPoint()
 
 
