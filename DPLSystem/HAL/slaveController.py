@@ -67,3 +67,9 @@ class slaveController():
                 is_unlocked = False
             sleep(2)
         return True
+
+# uncomment codes below to test this file
+# lockNum = int(input("Which locker do you want to unlock? "))
+# s = slaveController()
+# s.unlock_lock(lockNum)
+# s.wait_till_locker_closes(lockNum)
