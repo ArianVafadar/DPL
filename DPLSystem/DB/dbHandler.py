@@ -9,6 +9,15 @@ class dbHandler():
             otherwise it will return None
         '''
         return Session.query(Deliveries).filter_by(passcode=passcode).first()
+        
+    def get_delivery_by_trackingNumber(self,trackingNumber):
+        '''
+            checks the given _tracking_number to see if it belongs to any of the deliveries
+            if it exists then it will return the delivery_id of the delivery
+            otherwise it will return None
+        '''
+        return Session.query(Deliveries).filter_by(tracking_number=trackingNumber).first()
+        
     def update_delivery_status(self, delivery_id, status):
         delivery = Sesssion.query(delivery).filter_by(delivery_id=delivery_id).first()
         # delivery.status = status
