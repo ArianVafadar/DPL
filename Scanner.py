@@ -15,6 +15,10 @@ class Scanner():
         cv2.destroyAllWindows()
 
     def resultInDB(self, barcodeData):
+        '''
+        To check if the scanned barcode content matches the tracking number in database
+        return true if so, otherwise return false.
+        '''
         dbContent = dbHandler()
         if dbContent.get_delivery_by_trackingNumber(barcodeData) is not None:
             return True
@@ -22,6 +26,10 @@ class Scanner():
             return False
 
     def getScannedResult(self):
+        '''
+        main scanner function, scan barcode and qrcode, get content of the barcode and qrcode.
+        barcodeData: variable with a value of the content scanned from barcode or qrcode.
+        '''
         while True:
             frame = self.vs.read()
             frame = imutils.resize(frame, width=400)
@@ -36,7 +44,7 @@ class Scanner():
                 print("scanned result: ", barcodeData)
                 if self.resultInDB(barcodeData):
                     print("in database")
-                    break
+                    break # can change this line to return the scanned result for further reference.
                 else:
                     print("scanned barcode data is not in dababase")
                     continue
