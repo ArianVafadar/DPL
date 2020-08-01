@@ -46,3 +46,9 @@ class dbHandler():
         if not query:
             return -1
         return query.delivery_id
+    
+    def get_delivery_by_trackingNumber_test(self,trackingNumber):
+        '''
+            test function that returns test Tracking Number
+        '''
+        return "0812442025424"
