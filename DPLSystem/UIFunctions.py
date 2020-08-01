@@ -1,10 +1,12 @@
 from .DB.dbHandler import dbHandler
 from .HAL.slaveController import slaveController
+from .Scanner import Scanner
 
 class UIHandler():
     def __init__(self):
         self.db = dbHandler()
         self.slaveCntr = slaveController()
+        self.scanner = Scanner()
     def __del__(self):
         pass
     def verifyPasscode(self, passcode_list):
@@ -23,7 +25,7 @@ class UIHandler():
             print("something went wrong with the slave controller")
             return False
         return True
-
+    
     def wait_till_locker_closes(self,passcode):
         '''
             stall till the locker is closed and upon closing it will update the
