@@ -1,19 +1,20 @@
-from imutils.video import VideoStream
+# from imutils.video import VideoStream
 from pyzbar import pyzbar
-import imutils
+# import imutils
 import time
 import cv2
 # from DPLSystem.DB.dbHandler import dbHandler
 
 class Scanner():
     def __init__(self):
-        self.vs = VideoStream(usePiCamera=True).start()
+#         self.vs = VideoStream(usePiCamera=True).start()
 #         self.vs = VideoStream(src=0).start()
+#         self.vs = cv2.VideoCapture(0)
         self.result = False
 #         time.sleep(2.0)
 
-    def __del__(self):
-        cv2.destroyAllWindows()
+#     def __del__(self):
+#         cv2.destroyAllWindows()
 
     def resultInDB(self, barcodeData):
         '''
@@ -43,13 +44,14 @@ class Scanner():
         return: True if tracking number is in database; False is tracking number is not in database after scanned for 3 times.
         
         '''
-        
+        self.vs = cv2.VideoCapture(0)
         counter = 0
         maxScanningTime = 3 # this will allow user to scan for up to 3 times.
         while True:
-            frame = self.vs.read()
-            frame = imutils.resize(frame, width=400)
-            barcodes = pyzbar.decode(frame)
+            rect, frame = self.vs.read()
+#             frame = imutils.resize(frame, width=400)
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            barcodes = pyzbar.decode(gray)
             for barcode in barcodes:
                 (x, y, w, h) = barcode.rect
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
@@ -61,8 +63,8 @@ class Scanner():
                 if self.resultInDB(barcodeData):
                     print("in database ", barcodeData)
                     self.result = True
+#                     self.vs.release(0)
                     cv2.destroyAllWindows()
-                    self.vs.stop()
                     return True # tracking number is not in database
                 else:
                     print("tracking number ", barcodeData, "is not in database")
@@ -72,8 +74,9 @@ class Scanner():
                         continue # keep scanning until meet max scanning time
                     else:
                         self.result = False
+#                         self.vs.release(0)
                         cv2.destroyAllWindows()
-                        self.vs.stop()
+
                         return False # return false if tracking number is not in database after scanning for 3 times.
 
             cv2.imshow("Barcode Scanner", frame)
@@ -81,7 +84,7 @@ class Scanner():
 
 
 
-# uncomment codes below to test this file
-scan = Scanner()
-A = scan.getScannedResult()
-print(A)
+# # uncomment codes below to test this file
+# scan = Scanner()
+# A = scan.getScannedResult()
+# print(A)
