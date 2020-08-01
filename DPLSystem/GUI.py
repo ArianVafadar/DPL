@@ -30,9 +30,9 @@ class Ui_Dialog(object):
 
     def verifyCameraRecordings(self):
         pass
-
+# 
 #     def verifyTrackingNumber(self):
-#         result = self.scanner.getScannedResult
+#         result = self.scanner.result
 #         if result == True:
 #             print("trackingNumber detected")
 #         else:
