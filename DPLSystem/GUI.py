@@ -1,29 +1,45 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
 from .UIFunctions import UIHandler
+from .Scanner import Scanner
+# import threading
+# import concurrent.futures
 
 class Ui_Dialog(object):
     def __init__(self):
         self.handler = UIHandler()
         self.EnteredPasscode = []
         self.msg = QMessageBox()
+        self.scanner = Scanner()
 
     def verifyPasscode(self):
-        if self.handler.verifyPasscode(self.EnteredPasscode) == True:
-            self.msg.setWindowTitle("Verified")
-            self.msg.setText("Verified!")
-            self.msg.exec_()
-        else:
+
+        if self.handler.verifyPasscode(self.EnteredPasscode) == False:
             self.msg.setWindowTitle("Passcode Cannot be verified")
             self.msg.setText("Passcode Cannot be verified. Plase Double check it")
             self.msg.exec_()
+            self.EnteredPasscode.clear()
+            return
+
+        self.msg.setWindowTitle("Passcode Verified")
+        self.msg.setText("Please grab your package and close the locker")
+        self.msg.exec_()
+
+        self.handler.wait_till_locker_closes(self.EnteredPasscode)
         self.EnteredPasscode.clear()
 
     def verifyCameraRecordings(self):
         pass
+# 
+#     def verifyTrackingNumber(self):
+#         result = self.scanner.result
+#         if result == True:
+#             print("trackingNumber detected")
+#         else:
+#             self.msg.setWindowTitle("Tracking Number Cannot be verified")
 
     def setupUi(self, Dialog):
-
+        print("GUI setupUi")
         Dialog.setObjectName("Dialog")
         Dialog.resize(663, 451)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
@@ -103,6 +119,7 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
+        print("GUI retranslateUi")
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
 
@@ -150,3 +167,6 @@ class Ui_Dialog(object):
 
         self.WelcomeLabel.setText(_translate("Dialog", "Please Enter your Passcode Or Scan your Package/QrCode"))
         self.push_ScanQR.setText(_translate("Dialog", "Scan Qr Code/Tracking Number"))
+
+#         self.push_ScanQR.clicked.connect(self.verifyTrackingNumber)
+        self.push_ScanQR.clicked.connect(self.scanner.getScannedResult) 

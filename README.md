@@ -7,6 +7,25 @@ Source code for DPL station
 Assuming user already has python3 and python3-pip installed.
 
 To run the package you should:
+
+Modify files on raspberry pi:
+    
+    $ sudo vim /boot/cmdline.txt
+    
+    delete: console = serial1, 115200 and kgdboc = serial1, 115200
+    
+    After modification: 
+    
+    dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2  rootfstype=ext4 elevator=deadline fsck.repair=yes  rootwait
+    
+    $ sudo nano /boot/config.txt
+    
+    add: dtoverlay=sc16is752-spil, int_pin=24
+    
+    $ sudo reboot
+
+After modifying above files: 
+
   1. Setting up a virtual environment:
     - sudo pip3 install virtualenv
     - python3 -m venv env
@@ -19,4 +38,3 @@ To run the package you should:
 
   3. To run the file run the following command:
     - python3 main.py
-    PyQt5-sip==12.8.0
