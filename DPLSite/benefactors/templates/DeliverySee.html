@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+  <h1>Your Delivery</h1>
+  <article class="media content-section home-post">
+              <img alt="User's display pic" class="rounded-circle article-img user_image" src="{{ url_for('static', filename='user_images/' + delivery.deliv_user.user_image) }}">
+              <div class="media-body">
+                  <div class="article-metadata">
+                      <a class="mr-2" href="{{ url_for('other_account', user_id=delivery.deliv_user.id) }}">{{ delivery.deliv_user.username }}</a>
+                      <div>
+                        <small class="text-muted">{{delivery.date_posted.strftime('%Y-%m-%d')}}</small>
+                        <small class="text-muted">  |  </small>
+                        {%if delivery.status == 0%}
+                        <small class="open-status text-muted">In transit</small>
+                        {%elif delivery.status == 1%}
+                        <small class="open-status text-muted">Delivered</small>
+                        {%elif delivery.status == 2%}
+                        <small class="open-status text-muted">Cancelled</small>
+                        {%elif delivery.status == 3%}
+                        <small class="open-status text-muted">Open</small>
+                        {% endif %}
+                      </div>
+                  </div>
+                  <h3><a class="article-title" href="#">{{ delivery.title }}</a></h3>
+                  <h3><a class="article-title" href="#">{{ delivery.tracking_number }}</a></h3>
+                  <p class="article-content">Your post is still in progress and is not shipped yet!</p>
+              </div>
+    </article>
+
+</div>
+{% endblock content %}
